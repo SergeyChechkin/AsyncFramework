@@ -86,7 +86,7 @@ public:
         int job_begin = begin;
         int job_end;
 
-        std::counting_semaphore done(0); 
+        std::counting_semaphore cs_done(0); 
 
         // queue jobs
         int jobs_count = 0;
@@ -97,14 +97,14 @@ public:
                 --residual;
             }
             
-            enqueue([=, &done]{job(job_begin, job_end); done.release();});
+            enqueue([=, &cs_done]{job(job_begin, job_end); cs_done.release();});
             job_begin = job_end;
             ++jobs_count;
         }
 
         // wait for jobs to get done 
         for(size_t i = 0; i < jobs_count; ++i) {
-            done.acquire();
+            cs_done.acquire();
         }
     }
 

@@ -1,4 +1,4 @@
-#include "../include/AsyncFramework/AsyncNode.h"
+#include "async_framework/AsyncNode.h"
 
 static std::shared_ptr<AsyncSystem> system_;
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "AsyncFramework/AsyncNode.h"
-
+#include <async_framework/AsyncNode.h>
 #include <iostream>
 
 // Just some data structure
@@ -44,9 +43,8 @@ public:
     };
 private:
     void msgHandler(const MessagePtrT& msg) {
-        //std::cout << "SubscriberAsyncNode::msgHandler(...) " << std::endl; 
         std::cout << msg.use_count() << " " << msg->data_string_ << std::endl; 
-        //std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 };
 
@@ -65,10 +63,10 @@ public:
             this->responceHandler(std::move(request), std::move(responce));
         };
 
-        responce_handler_ = std::make_shared<ResponceMsgHandlerT>(this, on_responce_body);
-
-        request_id_ = AsyncNode::addRequest("test_msg", "test_msg_" + std::to_string(id_), responce_handler_);
-
+        request_id_ = AsyncNode::addRequest(
+            "test_msg", 
+            "test_msg_" + std::to_string(id_), 
+            std::make_shared<ResponceMsgHandlerT>(this, on_responce_body));
     }
 
     void sendRequests() {
@@ -83,9 +81,7 @@ public:
     }
 private:
     int id_;
-    PairID request_id_; // TestMessageWithData
-    std::shared_ptr<ResponceMsgHandlerT> responce_handler_;   
-     
+    PairID request_id_; 
     
     void responceHandler(const ResponseMsgPtrT& request, const ResponseMsgPtrT& responce) {
         std::cout << request->data_string_ << " " << request->data_uint_ << " " << responce->data_string_ << " " << responce->data_uint_ << std::endl;
@@ -121,9 +117,9 @@ private:
 
 
 void AsyncNodeTest() {
-    //SubscriberAsyncNode sub_node;
-    //PublisherAsyncNode pub_node;
-    //pub_node.sendMessages();
+    SubscriberAsyncNode sub_node;
+    PublisherAsyncNode pub_node;
+    pub_node.sendMessages();
 
     ResponceAsyncNode resp_node;
     RequestAsyncNode req_node_1(1);

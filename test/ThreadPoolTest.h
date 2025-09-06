@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Threads/ParallelFor.h"
-#include "Threads/ThreadPool.h"
+#include <threads/ParallelFor.h>
+#include <threads/ThreadPool.h>
 
 // test includes 
 #include <iostream>
